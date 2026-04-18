@@ -352,6 +352,9 @@ guidelines, or domain knowledge and you don't want to move or duplicate them.
 # Required — used in manifest presentation and logging
 project_name: my-app
 
+# Optional — primary language (python, java, csharp). Omit for auto-detection.
+language: python
+
 # Overlays — map base role names to your existing files
 # Keys must match base role directory names (architecture, coding-standards, etc.)
 overlays:
@@ -790,12 +793,86 @@ You rarely need to invoke them directly.
 | `intake` | 4 | Jira story reader and scope extractor with acceptance criteria |
 | `experience-design` | 2, cross-review | UX research, design options, and design specifications |
 | `architecture` | 3, 5, cross-review | System design, tech design, ADRs, and architectural review |
-| `coding-standards` | 7 | Python coding conventions and standards enforcement |
-| `testing-conventions` | 7 | pytest patterns, test quality, and coverage standards |
-| `code-review` | 7 | PR and code review with severity classification |
-| `security` | 7 | Security standards for auth, secrets, data protection, and compliance |
+| `coding-standards` | 7 | Coding conventions and standards enforcement (Python, Java, C#) |
+| `testing-conventions` | 7 | Test patterns, quality, and coverage standards (Python, Java, C#) |
+| `code-review` | 7 | PR and code review with severity classification (language-aware) |
+| `security` | 7 | Security standards for auth, secrets, data protection, and compliance (language-aware) |
 | `acceptance-validation` | 8 | Acceptance criteria verification gate |
 | `shipping` | 9 | PR creation, Jira updates, and ship workflow |
+
+## Multi-Language Support
+
+Four skills — `coding-standards`, `testing-conventions`, `code-review`, and `security` — support
+language-specific conventions via bundled **language packs**. Each skill has a two-layer structure:
+
+- **Universal base** (`SKILL.md` + `references/checklist.md`) — language-agnostic principles
+  (naming patterns, error handling strategy, test pyramid, security posture)
+- **Language packs** (`references/<language>/`) — language-specific checklists, code examples,
+  and tooling configuration
+
+Supported languages: **Python**, **Java**, **C#**.
+
+### How language is detected
+
+1. If `lao.config.yaml` has a `language:` field → use it
+2. Else auto-detect from project files:
+   - `pyproject.toml` / `setup.py` / `requirements.txt` → Python
+   - `pom.xml` / `build.gradle` → Java
+   - `*.csproj` / `*.sln` → C#
+3. If ambiguous or no match → ask the user
+
+### Configuration
+
+Add the optional `language` field to `lao.config.yaml`:
+
+```yaml
+project_name: my-app
+language: python    # python, java, or csharp (omit for auto-detection)
+```
+
+### What each language pack includes
+
+| Skill | Universal | Per-Language Pack |
+|---|---|---|
+| `coding-standards` | Naming, error handling, logging, project structure | Checklist, code examples, tooling config (build, CI, Dockerfile) |
+| `testing-conventions` | Test pyramid, naming, mocking strategy, coverage | Framework-specific checklist (pytest / JUnit / xUnit) |
+| `code-review` | Review modes, severity, output format | Language-specific code standards |
+| `security` | Secret management, auth, OWASP, compliance | Framework-specific checklist and code examples |
+
+### Adding a new language
+
+To add support for another language (e.g., Go, Rust, TypeScript):
+
+**Step 1 — Create language pack directories and files** in each of the 4 language-aware skills:
+
+| Skill | Files to create under `references/<language>/` |
+|---|---|
+| `coding-standards` | `checklist.md`, `examples.md`, `tooling-config.md` |
+| `testing-conventions` | `checklist.md` |
+| `code-review` | `code-standards.md` |
+| `security` | `checklist.md`, `examples.md` |
+
+Use existing language packs (e.g., `references/python/`) as templates — match the
+structure, headings, and level of detail. Each file should cover the language's
+idiomatic patterns for that skill's domain (naming, error handling, test framework,
+security libraries, build tooling, CI pipeline).
+
+**Step 2 — Update detection and validation:**
+
+- `lao/SKILL.md` — add detection rules for the new language's build files
+  (e.g., `go.mod` → Go, `Cargo.toml` → Rust, `package.json` → TypeScript)
+- `lao-setup/SKILL.md` — add the same detection to the project scan
+- `validate-project-skills.sh` — add the language to the `VALID_LANGUAGES` list
+- `validate-plugin.sh` — add the new `references/<language>/` paths to `EXPECTED_REFS`
+
+**Step 3 — Document:**
+
+- Update this README's "Supported languages" list and the "What each language pack
+  includes" table
+- Update the design spec § 9.3 "Supported languages" line
+
+No changes needed to the universal `SKILL.md` files or checklists — those are
+language-agnostic by design.
 
 ## Roadmap
 

@@ -55,8 +55,8 @@ Work through these areas in order. Spend your time proportional to risk — secu
 This is the most important thing. Does the code do what it's supposed to?
 
 - **Logic errors** — Off-by-one, wrong operator, inverted conditions, missing edge cases.
-- **Null/None handling** — Can any value be None where the code assumes it won't be? Are Optional types handled?
-- **Async correctness** — Is `await` used where needed? Are there blocking calls inside async functions? Are shared resources protected from race conditions?
+- **Null/nil/None handling** — Can any value be null where the code assumes it won't be? Are optional types handled?
+- **Async correctness** — Are async calls awaited where needed? Are there blocking calls inside async functions? Are shared resources protected from race conditions?
 - **Data flow** — Does data flow correctly from input to output? Are transformations correct? Are there silent data losses (e.g., swallowing exceptions, dropping fields)?
 
 ### 2. Security
@@ -73,14 +73,16 @@ For comprehensive security conventions and the full checklist, see the **Securit
 
 ### 3. Code Conventions
 
-See `references/code-standards.md` for the full project-specific reference. Key generic checks:
+See `references/code-standards.md` for the universal reference, and `references/<language>/code-standards.md` for language-specific standards.
 
-- **Formatting:** Project formatter and import sorter enforced by pre-commit hooks and CI — if they're wrong, something is misconfigured.
-- **Type hints:** All function signatures must have type hints. Schema models for data contracts.
-- **Naming:** Lowercase with underscores for files/directories. Descriptive variable names with auxiliary verbs (`is_active`, `has_permission`). Names reflect responsibility.
+Key checks regardless of language:
+
+- **Formatting:** Project formatter enforced by pre-commit hooks and CI — if it's wrong, something is misconfigured.
+- **Type safety:** Type annotations on all function signatures. Schema models for data contracts.
+- **Naming:** Follows language convention. Descriptive variable names with auxiliary verbs (`isActive`, `hasPermission`). Names reflect responsibility.
 - **Error handling:** Guard clauses and early returns — not deeply nested if/else. Handle errors at function start, happy path last. Custom error types for consistency.
-- **Structure:** Functional and declarative style preferred over classes where possible. RORO pattern (Receive an Object, Return an Object). Routes in routers, logic in services.
-- **Async:** `async def` for I/O-bound operations, `def` for pure functions. No blocking calls in the async event loop.
+- **Structure:** Separation of concerns — routes in routers, logic in services. No business logic in the routing layer.
+- **Async:** Async for I/O-bound operations, sync for pure functions. No blocking calls in the async event loop.
 
 ### 4. Testing
 
@@ -158,7 +160,7 @@ Structure every review consistently so the team knows what to expect.
 **Rules for the output:**
 - Always include the Summary and What's Good sections. Even a tough review should acknowledge what's done right.
 - Empty sections (no Blockers, no Warnings) are fine — just omit the section header rather than writing "None."
-- Be specific. "This is wrong" is not useful. "This will return None when `user.profile` is missing because line 47 doesn't handle the Optional — add a guard clause" is useful.
+- Be specific. "This is wrong" is not useful. "This will return null when `user.profile` is missing because line 47 doesn't handle the Optional — add a guard clause" is useful.
 - Suggest fixes, not just problems. When you flag an issue, show what the fix looks like or describe the approach.
 
 ---

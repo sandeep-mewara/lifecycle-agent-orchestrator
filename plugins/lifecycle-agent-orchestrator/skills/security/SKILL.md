@@ -8,61 +8,55 @@ description: Enforces security standards when writing or reviewing code that han
 Standards for services that handle sensitive data — where security failures can expose PII, regulated or highly sensitive domain data, and authentication credentials. These are non-negotiable in code review; violations are blockers, not suggestions.
 
 **Bundled references** (read when you need checklists or code examples):
-- `references/checklist.md` — Security review checklist (8 sections)
-- `references/examples.md` — Code examples for key patterns
+- `references/checklist.md` — Universal security review checklist (8 sections)
+- `references/<language>/checklist.md` — Language-specific security checklist
+- `references/<language>/examples.md` — Language-specific code examples for key patterns
+
+Where `<language>` is `python`, `java`, or `csharp` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start.
 
 ---
 
-## 1. Secret Management (secrets manager)
+## 1. Secret Management
 
-Never hardcode secrets. Config stores secret references (for example managed paths or secret names); runtime retrieves actual values.
+Never hardcode secrets. Config stores secret references (managed paths or secret names); runtime retrieves actual values.
 
 **Rules:**
-- Secrets stored as references (such as `secrets/...` paths or vault references) in settings classes, never as literal values
-- `get_secret()` retrieves from your secrets manager at runtime using a lazy singleton with module-level cache
-- Pre-warm secrets during app startup (`on_startup`) to fail fast if the secrets backend is unreachable
-- Never put secrets in environment variables, Docker layers, config files, or source code
-- `poetry.lock` committed — ensures reproducible dependency resolution without exposing secrets
+- Secrets stored as references (such as vault paths, secret names, or key identifiers) in settings, never as literal values
+- Runtime retrieval via a secrets manager client with lazy caching
+- Pre-warm secrets during app startup to fail fast if the secrets backend is unreachable
+- Never put secrets in environment variables, container layers, config files, or source code
+- Dependency lock file committed for reproducible builds
 
-**Pattern:**
-```python
-# In settings (the PATH or name, not the secret)
-langfuse_public_key: str = "secrets/langfuse/public_key"
-
-# At runtime
-actual_key = get_secret(settings.langfuse_public_key)
-```
-
-See the `coding-standards` skill `references/examples.md` for a secrets manager client factory and `get_secret()` implementation pattern.
+See `references/<language>/examples.md` for a secrets manager client pattern.
 
 ---
 
 ## 2. Data Protection — Encryption at Rest and in Transit
 
 **In transit:**
-- All traffic over HTTPS/TLS via your service mesh — no plain HTTP endpoints
-- LLM API calls go through your internal HTTPS proxy (or a vetted egress path) where required
-- IAM tokens transmitted only in headers, never in query parameters or request bodies
+- All traffic over HTTPS/TLS via your service mesh or gateway — no plain HTTP endpoints
+- LLM API calls go through your HTTPS proxy or a vetted egress path where required
+- Auth tokens transmitted only in headers, never in query parameters or request bodies
 
 **At rest:**
 - Platform-managed encryption at rest for all data stores — application does not manage encryption keys
 - Sensitive data classified accordingly — treat equivalently to PII for storage where policies apply
 - No local file storage of sensitive data
-- Future DB-backed persistence must use platform-managed encryption
+- DB-backed persistence must use platform-managed encryption
 
 **What is sensitive (minimum):**
 - User authentication tokens and API keys
 - Secrets manager credentials and references
-- Any regulated or highly sensitive domain fields (see PROJECT.md for service-specific examples such as `order_id`, `promotion_id`, `order_year`, `order_status` in e-commerce or fintech contexts)
+- Any regulated or highly sensitive domain fields (see PROJECT.md for service-specific examples)
 
 ---
 
 ## 3. Authentication & Authorization
 
-**Authentication — IAM headers on every request:**
-- IAM headers validated via Pydantic `Annotated[str, AfterValidator()]` — rejects malformed tokens at parse time
+**Authentication — identity headers on every request:**
+- Auth headers validated via schema model with validators — rejects malformed tokens at parse time
 - API gateway auth enforced — explicit allowlist for unauthenticated routes (health/actuator only)
-- AuthZ client initialized at startup; graceful degradation if unavailable
+- Auth client initialized at startup; graceful degradation if unavailable
 
 **Least privilege:**
 - Each component receives only the credentials it needs, not the full request context
@@ -79,7 +73,7 @@ See the `coding-standards` skill `references/examples.md` for a secrets manager 
 ## 4. OWASP Top 10 — Secure Coding Practices
 
 **Injection prevention:**
-- Pydantic models validate all external input at system boundaries (API requests, tool inputs)
+- Schema models validate all external input at system boundaries (API requests, tool inputs)
 - No raw string interpolation into prompts, queries, or commands — use named template variables
 
 **Prompt injection (LLM-specific):**
@@ -93,7 +87,7 @@ See the `coding-standards` skill `references/examples.md` for a secrets manager 
 
 **Security misconfiguration:**
 - Environment-based settings hierarchy prevents prod config from leaking into dev
-- `APP_ENV` drives config — misconfiguration falls back safely to `LocalSettings`
+- Environment identifier drives config — misconfiguration falls back safely to dev defaults
 - Debug-level logging disabled in production settings
 
 **SSRF prevention:**
@@ -106,27 +100,27 @@ See the `coding-standards` skill `references/examples.md` for a secrets manager 
 ## 5. Dependency Management & Vulnerability Scanning
 
 **Dependency hygiene:**
-- Dependabot configured for weekly pip updates (`.github/dependabot.yml`)
-- Dependencies pinned in `pyproject.toml`, lock file committed (`poetry.lock`)
-- Private package registry as primary Poetry source when you mirror or vet packages through an internal proxy
+- Automated dependency update tool configured (Dependabot, Renovate, or equivalent)
+- Dependencies pinned in the project's manifest file, lock file committed
+- Use your organization's package registry when mirroring or vetting dependencies
 
 **Container security:**
 - Container image scanning in CI pipeline
-- Non-root container user (`appuser`) in Dockerfile
-- Multi-stage Docker build — dev/test dependencies excluded from runtime image
+- Non-root container user in Dockerfile
+- Multi-stage build — dev/test dependencies excluded from runtime image
 
 **Vulnerability response:**
-- Dependabot PRs reviewed weekly — security patches prioritized over feature updates
-- `poetry.lock` conflicts resolved by regenerating from updated `pyproject.toml`, not by manual editing
+- Dependency update PRs reviewed weekly — security patches prioritized over feature updates
+- Lock file conflicts resolved by regenerating from the updated manifest, not by manual editing
 
 ---
 
 ## 6. API Security
 
 **Validation:**
-- Pydantic models enforce schema at every API boundary
-- Required fields fail fast with 422 if missing
-- `ErrorCode(StrEnum)` provides machine-readable error codes — never opaque codes
+- Schema models enforce validation at every API boundary
+- Required fields fail fast with appropriate HTTP error (400/422) if missing
+- Machine-readable error codes — never opaque codes
 
 **Rate limiting:**
 - Upstream rate limits caught and mapped to appropriate status codes
@@ -144,20 +138,20 @@ See the `coding-standards` skill `references/examples.md` for a secrets manager 
 **General principle:** Log identifiers and metadata, never values or content.
 
 **What must never appear in logs, traces, or error messages:**
-- Highly sensitive domain values (for example credit card numbers, account balances, personal addresses where applicable)
+- Highly sensitive domain values (e.g., payment details, account balances, government IDs)
 - PII when tied to sensitive processing
 - Authentication tokens and API keys
 - Full request/response payloads containing sensitive data
 
 **Enforcement:**
-- `structlog` with `JSONRenderer` in production enables programmatic field redaction (see Coding Standards skill for implementation)
+- Structured logging with JSON output in production enables programmatic field redaction
 - Tracing tools carry correlation IDs only — not data content
 - Centralized error handlers ensure error responses contain type + message only
 
 **Monitoring stack:**
 - Application metrics (request rate, error rate, latency) via your metrics system
 - LLM tracing tool for prompt/completion observability
-- Error tracking SDK for production error aggregation and alerting — see Coding Standards skill § Error Tracking Conventions
+- Error tracking for production error aggregation and alerting
 
 See PROJECT.md for the service-specific log field allowlist and sensitive field inventory.
 
@@ -185,4 +179,4 @@ See PROJECT.md for the service-specific log field allowlist and sensitive field 
 
 ---
 
-When reviewing code or writing new features, consult `references/checklist.md` for the complete security verification checklist.
+When reviewing code or writing new features, consult `references/checklist.md` and `references/<language>/checklist.md` for the complete security verification checklist.

@@ -843,10 +843,10 @@ Skills are divided into **commands** (user-invoked entry points) and **roles**
 | **intake** | Role | Jira story reader, scope extractor, AC derivation | 4 (per-ticket) |
 | **experience-design** | Role | UX research, design options, specifications | 2 (PRD-level), cross-reviews |
 | **architecture** | Role | System design, ADRs, review (system-level and ticket-level) | 3 (system), 5 (per-ticket), cross-reviews |
-| **coding-standards** | Role | Python coding conventions and standards enforcement | 7 (via overlay) |
-| **testing-conventions** | Role | pytest patterns, test quality, coverage standards | 7 (via overlay) |
-| **code-review** | Role | PR and code review with severity classification | 7 |
-| **security** | Role | Security standards for auth, secrets, data protection, compliance | 7 (via overlay) |
+| **coding-standards** | Role | Coding conventions and standards enforcement (Python, Java, C#) | 7 (via overlay) |
+| **testing-conventions** | Role | Test patterns, quality, coverage standards (Python, Java, C#) | 7 (via overlay) |
+| **code-review** | Role | PR and code review with severity classification (language-aware) | 7 |
+| **security** | Role | Security standards for auth, secrets, data protection, compliance (language-aware) | 7 (via overlay) |
 | **acceptance-validation** | Role | AC verification gate with evidence recording | 8 |
 | **shipping** | Role | PR creation, Jira updates, ship workflow | 9 |
 
@@ -861,6 +861,48 @@ These workflows incorporate the key disciplines needed for production-quality ex
 | 7: Implement | TDD + two-stage review | Red-green-refactor, spec compliance review, code quality review, systematic debugging |
 | 8: Validate | Evidence-based verification | Verification gate (identify → run → read → confirm), rationalization prevention |
 | 9: Ship | Structured completion | Pre-ship test verification, 4 completion options (PR, merge, keep, discard) |
+
+### 9.3 Multi-Language Support (Language Packs)
+
+Four skills (`coding-standards`, `testing-conventions`, `code-review`, `security`) use a
+**language pack** architecture to support multiple programming languages while keeping
+universal principles in a shared base:
+
+```
+skills/<skill>/
+  SKILL.md                          # Universal principles (language-agnostic)
+  references/
+    checklist.md                    # Universal checklist
+    python/                         # Python language pack
+      checklist.md                  # Python-specific checklist
+      examples.md                   # Python code examples
+      tooling-config.md             # pyproject.toml, Dockerfile, CI
+    java/                           # Java language pack
+      checklist.md
+      examples.md
+      tooling-config.md
+    csharp/                         # C# language pack
+      checklist.md
+      examples.md
+      tooling-config.md
+```
+
+**Design rationale:**
+
+- **Universal base** captures principles that transcend language (error handling strategy,
+  test pyramid design, security posture, review severity). These change rarely.
+- **Language packs** capture implementation patterns (pytest vs JUnit, structlog vs SLF4J,
+  Pydantic vs Bean Validation). These are specific and prescriptive.
+- **Language detection** happens once at pipeline start (from `lao.config.yaml` or
+  auto-detected from project files) and is recorded in the manifest.
+- **Extensible** — adding a new language requires only: (1) creating a
+  `references/<language>/` subdirectory in each of the 4 skills with the expected
+  files (checklist, examples, tooling config per skill), (2) adding detection rules
+  for that language's build files, and (3) updating validation scripts. No universal
+  SKILL.md or checklist changes needed — the language-agnostic base remains untouched.
+  See the README "Adding a new language" section for the step-by-step procedure.
+
+**Supported languages:** Python, Java, C#.
 
 ---
 

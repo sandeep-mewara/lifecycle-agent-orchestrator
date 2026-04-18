@@ -24,7 +24,15 @@ human confirmation before proceeding to the next.
 
 ### Step 1 — Scan the project
 
-Scan the project root for files that look like potential skill content:
+Scan the project root for files that look like potential skill content.
+
+**Language detection:** Also detect the project's primary language:
+- `pyproject.toml`, `setup.py`, or `requirements.txt` → `python`
+- `pom.xml`, `build.gradle`, or `build.gradle.kts` → `java`
+- `*.csproj` or `*.sln` → `csharp`
+- If ambiguous or no match → ask the user during Step 3
+
+Include the detected language in the scan results summary:
 
 **Overlay candidates:** Markdown files whose names contain lifecycle-relevant keywords
 (`architecture`, `coding-standards`, `testing-conventions`, `code-review`,
@@ -43,6 +51,8 @@ Present findings in a clear summary:
 
 ```
 === Project Scan Results ===
+
+Detected language: python (from pyproject.toml)
 
 Potential overlays (files that could customize base roles):
   docs/architecture/standards.md → architecture
@@ -100,13 +110,18 @@ want to create files from scratch.
 **If Option A (config):**
 
 1. Ask for the project name (suggest based on directory name or package.json)
-2. Walk through each scan finding and ask whether to include it:
+2. Confirm the detected language (or ask if detection was ambiguous):
+   ```
+   Detected language: python (from pyproject.toml). Correct? (y/n)
+   ```
+   If user says no, ask which language to use (`python`, `java`, `csharp`, or omit for auto-detection).
+3. Walk through each scan finding and ask whether to include it:
    ```
    Include docs/architecture/standards.md as architecture overlay? (y/n)
    Include docs/domain/auth-system.md as domain context? (y/n)
    ```
-3. Ask if there are additional files not found by the scan that should be included
-4. For domain files without `applies_to` frontmatter, note they'll default to `all`
+4. Ask if there are additional files not found by the scan that should be included
+5. For domain files without `applies_to` frontmatter, note they'll default to `all`
 
 **If Option B (convention):**
 
@@ -158,6 +173,7 @@ Print a summary and guide the user to their next action:
 === Setup Complete ===
 
 Project: <project-name>
+Language: python
 Method: lao.config.yaml (or: convention directory)
 Overlays: architecture, coding-standards, code-review
 Domain context: auth-system (all), data-model (all)

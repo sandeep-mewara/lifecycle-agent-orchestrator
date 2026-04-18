@@ -135,12 +135,38 @@ EXPECTED_REFS=(
     "skills/product-management/references/prd-template.md"
     "skills/intake/references/scope-summary-template.md"
     "skills/experience-design/references/design-spec-template.md"
-    "skills/coding-standards/references/checklist.md"
-    "skills/testing-conventions/references/checklist.md"
-    "skills/code-review/references/code-standards.md"
     "skills/acceptance-validation/references/validation-report-template.md"
     "skills/shipping/references/pr-template.md"
     "skills/lao/references/phase-workflows.md"
+    # coding-standards: universal + language packs
+    "skills/coding-standards/references/checklist.md"
+    "skills/coding-standards/references/python/checklist.md"
+    "skills/coding-standards/references/python/examples.md"
+    "skills/coding-standards/references/python/tooling-config.md"
+    "skills/coding-standards/references/java/checklist.md"
+    "skills/coding-standards/references/java/examples.md"
+    "skills/coding-standards/references/java/tooling-config.md"
+    "skills/coding-standards/references/csharp/checklist.md"
+    "skills/coding-standards/references/csharp/examples.md"
+    "skills/coding-standards/references/csharp/tooling-config.md"
+    # testing-conventions: universal + language packs
+    "skills/testing-conventions/references/checklist.md"
+    "skills/testing-conventions/references/python/checklist.md"
+    "skills/testing-conventions/references/java/checklist.md"
+    "skills/testing-conventions/references/csharp/checklist.md"
+    # code-review: universal + language packs
+    "skills/code-review/references/code-standards.md"
+    "skills/code-review/references/python/code-standards.md"
+    "skills/code-review/references/java/code-standards.md"
+    "skills/code-review/references/csharp/code-standards.md"
+    # security: universal + language packs
+    "skills/security/references/checklist.md"
+    "skills/security/references/python/checklist.md"
+    "skills/security/references/python/examples.md"
+    "skills/security/references/java/checklist.md"
+    "skills/security/references/java/examples.md"
+    "skills/security/references/csharp/checklist.md"
+    "skills/security/references/csharp/examples.md"
 )
 
 for ref in "${EXPECTED_REFS[@]}"; do

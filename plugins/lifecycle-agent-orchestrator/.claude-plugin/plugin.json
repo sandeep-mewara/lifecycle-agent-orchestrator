@@ -1,7 +1,7 @@
 {
   "name": "lifecycle-agent-orchestrator",
   "description": "Portable development lifecycle engine that drives requirements through to pull requests — coordinates product management, design, architecture, implementation, validation, and shipping phases with cross-role review gates and structured checkpoints.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "author": {
     "name": "Sandeep Mewara"
   },

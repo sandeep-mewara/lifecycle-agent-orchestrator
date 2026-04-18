@@ -283,24 +283,36 @@ Before any phase runs, discover project skills and build a manifest.
 Look for `<project-root>/lao.config.yaml`. If found:
 
 1. Parse the YAML file.
-2. Resolve overlay paths — verify each mapped file exists. Keys must match
+2. Detect project language:
+   - If `language:` field is present → use it (valid: `python`, `java`, `csharp`)
+   - If absent → auto-detect from project files:
+     - `pyproject.toml`, `setup.py`, or `requirements.txt` → `python`
+     - `pom.xml` or `build.gradle` or `build.gradle.kts` → `java`
+     - `*.csproj` or `*.sln` → `csharp`
+   - If ambiguous or no match → ask the user
+   - Record the detected language in the manifest. Language-specific
+     references (`references/<language>/`) are loaded by skills that
+     support language packs (coding-standards, testing-conventions,
+     code-review, security).
+3. Resolve overlay paths — verify each mapped file exists. Keys must match
    base role directory names.
-3. Resolve workflow override paths — verify each mapped file exists. Keys
+4. Resolve workflow override paths — verify each mapped file exists. Keys
    must be one of: `plan`, `implement`, `validate`, `ship`. A workflow
    override **replaces** the built-in workflow for that phase entirely.
-4. Resolve domain paths — expand glob patterns (e.g., `docs/domain/*.md`),
+5. Resolve domain paths — expand glob patterns (e.g., `docs/domain/*.md`),
    verify each resolved file exists and has valid frontmatter (`name`,
    `description`, `applies_to`). Supports both globs and explicit paths
    in the same list.
-5. Resolve extra role paths — verify each mapped file exists and has valid
+6. Resolve extra role paths — verify each mapped file exists and has valid
    frontmatter (`name`, `description`, and optionally `applies_to`). Keys
    must NOT match base role names.
-6. Skip convention scan entirely.
+7. Skip convention scan entirely.
 
 Config file format:
 
 ```yaml
 project_name: my-app
+language: python            # optional: python, java, csharp (or omit for auto-detection)
 overlays:
   architecture: docs/architecture/standards.md
   coding-standards: .cursor/rules/coding.md
@@ -319,6 +331,10 @@ Only `project_name` is required; all other sections are optional.
 If no config file is found, proceed to Step 2.
 
 **Step 2 — Convention scan (fallback):**
+
+If no config file was found, auto-detect the project language from project
+files (same detection rules as Step 1, sub-step 2). Record the result in
+the manifest.
 
 Scan `<project-root>/skills/` directly. Build the manifest from the
 directory contents:
@@ -360,6 +376,7 @@ Present the completed manifest at the start of the first checkpoint:
 ```
 Project skills detected for <project-name>:
   Source: lao.config.yaml (or: convention scan)
+  Language: python (from config) | java (auto-detected) | unknown (ask user)
   Overlays: architecture, coding-standards, shipping
   Extra roles: compliance-review (architecture, code-review, security)
   Domain context: auth-system (all), payment-processing (architecture, code-review)

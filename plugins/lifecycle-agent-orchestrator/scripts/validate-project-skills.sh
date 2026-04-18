@@ -196,6 +196,22 @@ run_config_mode() {
     fi
     echo ""
 
+    # --- language ---
+    echo "--- Language ---"
+    local VALID_LANGUAGES="python java csharp"
+    local language
+    language=$(grep "^language:" "$config_file" 2>/dev/null | sed 's/^language:[[:space:]]*//' | tr -d '"' | tr -d "'" | sed 's/[[:space:]]*$//' || true)
+    if [ -n "$language" ]; then
+        if echo "$VALID_LANGUAGES" | grep -qw "$language"; then
+            pass "language: $language"
+        else
+            fail "language '$language' is not valid (expected: $VALID_LANGUAGES)"
+        fi
+    else
+        pass "language not set (will auto-detect at runtime)"
+    fi
+    echo ""
+
     # --- Overlays ---
     echo "--- Overlays ---"
     local in_overlays=0

@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-04-18
+
+### Added
+- Multi-language support: `coding-standards`, `testing-conventions`, `code-review`, and `security` skills now support Python, Java, and C# via language packs
+- Universal (language-agnostic) SKILL.md and checklists for all 4 language-aware skills
+- Language-specific reference packs under `references/python/`, `references/java/`, `references/csharp/` for each skill
+- `language` field in `lao.config.yaml` for explicit language configuration
+- Auto-detection of project language from build files (`pyproject.toml`, `pom.xml`, `*.csproj`, etc.)
+- Language detection integrated into `lao/SKILL.md` pipeline start and `lao-setup/SKILL.md` project scan
+- Language field validation in `validate-project-skills.sh`
+- Multi-Language Support section in README and design spec
+
+### Changed
+- `coding-standards/SKILL.md` rewritten as language-agnostic (universal principles only)
+- `testing-conventions/SKILL.md` rewritten as language-agnostic (universal principles only)
+- `code-review/SKILL.md` updated to reference language-specific code standards
+- `security/SKILL.md` updated to reference language-specific checklists and examples
+- Universal checklists extracted for all 4 skills (language-agnostic items only)
+- `validate-plugin.sh` EXPECTED_REFS expanded from 11 to 35 entries (universal + 3 language packs × 4 skills)
+- Manifest presentation now includes detected language
+
 ## [1.3.0] - 2026-04-18
 
 ### Changed
