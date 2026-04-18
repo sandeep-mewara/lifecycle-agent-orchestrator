@@ -131,6 +131,7 @@ echo "--- References ---"
 
 EXPECTED_REFS=(
     "skills/architecture/references/architecture-template.md"
+    "skills/architecture/references/document-formats.md"
     "skills/architecture/references/review-checklist.md"
     "skills/product-management/references/prd-template.md"
     "skills/intake/references/scope-summary-template.md"

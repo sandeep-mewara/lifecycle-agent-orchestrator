@@ -43,6 +43,41 @@ costs no extra tokens. Human approval checkpoints remain active during execution
 | **Verification** | Disconnected testing. "It works on my machine." | **Automated Validation.** Every AC is proven via recorded evidence. | **Ship with Confidence.** PRs include an automated Acceptance Report. |
 
 
+## Quickstart (5 minutes)
+
+**1. Install** (inside a Claude Code or Cursor session):
+
+```
+/plugin marketplace add sandeep-mewara/lifecycle-orchestrator
+/plugin install lifecycle-agent-orchestrator@lifecycle-agent-orchestrator
+```
+
+**2. Try the dry run** — simulates the full 9-phase pipeline on a sample requirement with no real changes:
+
+```
+/lao-dry-run
+```
+
+Watch the orchestrator walk through Product Management → Experience Design → Architecture → Intake → Tech Design → Plan → Implement → Validate → Ship — all simulated. This validates the plugin is installed and working.
+
+**3. Set up your project** — scan your repo and connect existing docs:
+
+```
+/lao-setup
+```
+
+The setup wizard detects your project's languages, finds architecture docs, coding standards, and domain knowledge, then helps you map them as overlays. You can choose config-based (`lao.config.yaml`) or convention-based (`skills/` directory) setup.
+
+**4. Run the pipeline** — give it a requirement or Jira ticket:
+
+```
+/lao
+```
+
+The orchestrator starts in **preview mode** (no real changes). You iterate on scope, design, and plan, then say "proceed" to execute. Human approval checkpoints remain active throughout.
+
+---
+
 ## Prerequisites
 
 Use this checklist so the orchestrator has everything it composes at runtime:
@@ -201,7 +236,7 @@ From a regular terminal, run the validation scripts:
 ./plugins/lifecycle-agent-orchestrator/scripts/validate-plugin.sh
 ```
 
-Runs 61 structural checks — manifest, skills, frontmatter, references, contracts,
+Runs 91 structural checks — manifest, skills, frontmatter, references, contracts,
 examples, and documentation.
 
 **Validate your project's overlays, domain files, and extra roles:**
@@ -688,7 +723,7 @@ lifecycle-orchestrator/                    # Marketplace root (this repo)
 │       │   └── sample-requirement.md      # Bundled sample for dry-run
 │       ├── scripts/
 │       │   ├── check-consistency.sh       # Cross-reference consistency checks
-│       │   ├── validate-plugin.sh         # Plugin structural validation (61 checks)
+│       │   ├── validate-plugin.sh         # Plugin structural validation (91 checks)
 │       │   └── validate-project-skills.sh # Project skills validation (convention/config/scan)
 │       └── tests/
 │           ├── validate-plugin.bats       # Plugin validation tests
