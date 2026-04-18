@@ -1,0 +1,8 @@
+project_name: broken-app
+
+overlays:
+  not-a-real-role: docs/nonexistent.md
+  architecture: docs/also-missing.md
+
+extra_roles:
+  architecture: tools/oops.md

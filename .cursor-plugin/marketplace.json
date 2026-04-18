@@ -1,0 +1,17 @@
+{
+  "name": "lifecycle-agent-orchestrator",
+  "description": "Lifecycle Agent Orchestrator — portable development lifecycle engine that drives requirements through to pull requests",
+  "owner": {
+    "name": "Sandeep Mewara"
+  },
+  "plugins": [
+    {
+      "name": "lifecycle-agent-orchestrator",
+      "description": "Portable development lifecycle engine — drives requirements through to pull requests with cross-role review gates and structured checkpoints",
+      "author": {
+        "name": "Sandeep Mewara"
+      },
+      "source": "./plugins/lifecycle-agent-orchestrator"
+    }
+  ]
+}

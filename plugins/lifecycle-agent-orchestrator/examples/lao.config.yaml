@@ -1,0 +1,71 @@
+# =============================================================================
+# lao.config.yaml — Lifecycle Agent Orchestrator Project Configuration
+# =============================================================================
+#
+# Place this file at the root of your project to map your existing files
+# to orchestrator roles. When present, this config takes precedence over
+# the convention-based directory structure (skills/).
+#
+# Validate with:
+#   ./plugins/lifecycle-agent-orchestrator/scripts/validate-project-skills.sh --config lao.config.yaml
+#
+# Scan your project for potential files to connect:
+#   ./plugins/lifecycle-agent-orchestrator/scripts/validate-project-skills.sh --scan .
+#
+# Only project_name is required — all other sections are optional.
+# =============================================================================
+
+# Required: used in manifest presentation, logging, and human checkpoints.
+project_name: my-app
+
+# Overlays: map base role names to your project-specific files.
+# Keys MUST match a base role directory name. The file content
+# is merged with the base skill, with your overlay taking precedence
+# on conflict.
+#
+# Available base roles:
+#   architecture, coding-standards, testing-conventions, code-review,
+#   shipping, product-management, intake, experience-design, security,
+#   acceptance-validation, lao, lao-dry-run, lao-setup
+overlays:
+  architecture: docs/architecture/standards.md
+  coding-standards: .cursor/rules/coding.md
+  code-review: docs/review-checklist.md
+  # testing-conventions: tests/CONVENTIONS.md   # uncomment to activate
+
+# Domain context: cross-cutting knowledge shared across multiple phases.
+# Each file must have YAML frontmatter with: name, description,
+# and optionally applies_to (defaults to "all" if omitted).
+#
+# Supports glob patterns and explicit paths in the same list.
+# Globs are expanded at pipeline start.
+#
+# Valid applies_to values:
+#   all, product-management, intake, experience-design, architecture,
+#   coding-standards, testing-conventions, code-review, security,
+#   acceptance-validation, shipping
+domain:
+  - docs/domain/*.md               # glob: all .md files in docs/domain/
+  - src/payments/DESIGN.md          # explicit: single file
+
+# Workflow overrides: replace built-in execution workflows for Phases 6-9.
+# Keys must be one of: plan, implement, validate, ship.
+# The file REPLACES the built-in workflow for that phase (not additive).
+# Omitted phases use the built-in workflow from phase-workflows.md.
+#
+# Use this when your team follows a different execution methodology
+# (e.g., BDD instead of TDD, or a custom review process).
+workflows:
+  # plan: docs/workflows/our-planning-process.md
+  # implement: docs/workflows/our-bdd-process.md
+  # validate: docs/workflows/our-validation-process.md
+  # ship: docs/workflows/our-shipping-process.md
+
+# Extra roles: project-specific roles not in the base plugin.
+# Keys must NOT match any base role name. Each file should have
+# SKILL.md-style frontmatter (name, description, applies_to).
+# applies_to declares which phases load this role as additional context.
+# If applies_to is missing, the role will NOT be loaded (manifest warns).
+extra_roles:
+  compliance-review: tools/compliance/SKILL.md
+  # performance-review: docs/performance/SKILL.md  # uncomment to activate

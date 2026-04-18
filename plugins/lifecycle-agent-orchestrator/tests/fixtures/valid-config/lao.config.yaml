@@ -1,0 +1,10 @@
+project_name: test-app
+
+overlays:
+  architecture: docs/architecture/standards.md
+
+domain:
+  - docs/domain/*.md
+
+extra_roles:
+  compliance-review: tools/compliance/SKILL.md
