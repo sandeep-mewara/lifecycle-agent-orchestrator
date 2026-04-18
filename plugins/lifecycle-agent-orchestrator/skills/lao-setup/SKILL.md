@@ -26,14 +26,15 @@ human confirmation before proceeding to the next.
 
 Scan the project root for files that look like potential skill content.
 
-**Language detection:** Also detect the project's primary language:
+**Language detection:** Detect the project's languages by checking **all**
+rules and collecting every match (a project can match more than one):
 - `pyproject.toml`, `setup.py`, or `requirements.txt` → `python`
 - `pom.xml`, `build.gradle`, or `build.gradle.kts` → `java`
 - `*.csproj` or `*.sln` → `csharp`
 - `package.json` with `react` in dependencies, or `next.config.*` → `react`
-- If ambiguous or no match → ask the user during Step 3
+- If no match → ask the user during Step 3
 
-Include the detected language in the scan results summary:
+Include the detected languages in the scan results summary:
 
 **Overlay candidates:** Markdown files whose names contain lifecycle-relevant keywords
 (`architecture`, `coding-standards`, `testing-conventions`, `code-review`,
@@ -53,7 +54,7 @@ Present findings in a clear summary:
 ```
 === Project Scan Results ===
 
-Detected language: python (from pyproject.toml)
+Detected languages: python (from pyproject.toml), react (from package.json)
 
 Potential overlays (files that could customize base roles):
   docs/architecture/standards.md → architecture
@@ -111,11 +112,12 @@ want to create files from scratch.
 **If Option A (config):**
 
 1. Ask for the project name (suggest based on directory name or package.json)
-2. Confirm the detected language (or ask if detection was ambiguous):
+2. Confirm the detected languages (or ask if detection found none):
    ```
-   Detected language: python (from pyproject.toml). Correct? (y/n)
+   Detected languages: python, react. Correct? (y/n)
    ```
-   If user says no, ask which language to use (`python`, `java`, `csharp`, `react`, or omit for auto-detection).
+   If user says no, ask which languages apply (any combination of
+   `python`, `java`, `csharp`, `react`, or omit for auto-detection).
 3. Walk through each scan finding and ask whether to include it:
    ```
    Include docs/architecture/standards.md as architecture overlay? (y/n)
@@ -174,7 +176,7 @@ Print a summary and guide the user to their next action:
 === Setup Complete ===
 
 Project: <project-name>
-Language: python
+Languages: python, react
 Method: lao.config.yaml (or: convention directory)
 Overlays: architecture, coding-standards, code-review
 Domain context: auth-system (all), data-model (all)

@@ -73,7 +73,7 @@ For comprehensive security conventions and the full checklist, see the **Securit
 
 ### 3. Code Conventions
 
-See `references/code-standards.md` for the universal reference, and `references/<language>/code-standards.md` for language-specific standards.
+See `references/code-standards.md` for the universal reference, and `references/<language>/code-standards.md` for language-specific standards. Multi-language projects load all detected packs; apply each to files of its language.
 
 Key checks regardless of language:
 

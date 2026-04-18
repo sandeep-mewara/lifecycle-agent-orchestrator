@@ -11,7 +11,7 @@ Standards for testing across your services. Tests follow a layered strategy: fas
 - `references/checklist.md` — Universal test review checklist
 - `references/<language>/checklist.md` — Language-specific test checklist
 
-Where `<language>` is `python`, `java`, `csharp`, or `react` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start.
+Where `<language>` is `python`, `java`, `csharp`, or `react` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start. Multi-language projects load all detected packs; apply each to files of its language.
 
 See PROJECT.md for service-specific test directory structure, test commands, evaluation dataset details, and CI pipeline integration.
 

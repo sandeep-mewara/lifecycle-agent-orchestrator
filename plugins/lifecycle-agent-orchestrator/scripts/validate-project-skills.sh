@@ -196,19 +196,47 @@ run_config_mode() {
     fi
     echo ""
 
-    # --- language ---
-    echo "--- Language ---"
+    # --- languages ---
+    echo "--- Languages ---"
     local VALID_LANGUAGES="python java csharp react"
-    local language
-    language=$(grep "^language:" "$config_file" 2>/dev/null | sed 's/^language:[[:space:]]*//' | tr -d '"' | tr -d "'" | sed 's/[[:space:]]*$//' || true)
-    if [ -n "$language" ]; then
-        if echo "$VALID_LANGUAGES" | grep -qw "$language"; then
-            pass "language: $language"
-        else
-            fail "language '$language' is not valid (expected: $VALID_LANGUAGES)"
+    local languages_found=0
+
+    # Check for 'languages:' list (new format)
+    local in_languages=0
+    while IFS= read -r line; do
+        if echo "$line" | grep -q "^languages:"; then
+            in_languages=1
+            continue
         fi
-    else
-        pass "language not set (will auto-detect at runtime)"
+        if [ $in_languages -eq 1 ]; then
+            if echo "$line" | grep -q "^[[:space:]]*-[[:space:]]"; then
+                local lang_val
+                lang_val=$(echo "$line" | sed 's/^[[:space:]]*-[[:space:]]*//' | tr -d '"' | tr -d "'" | sed 's/[[:space:]]*$//')
+                if echo "$VALID_LANGUAGES" | grep -qw "$lang_val"; then
+                    pass "languages[]: $lang_val"
+                    languages_found=$((languages_found + 1))
+                else
+                    fail "languages[] '$lang_val' is not valid (expected: $VALID_LANGUAGES)"
+                fi
+            elif echo "$line" | grep -q "^[a-z]"; then
+                break
+            fi
+        fi
+    done < "$config_file"
+
+    # Fallback: check for 'language:' string (backward compat)
+    if [ $languages_found -eq 0 ]; then
+        local language
+        language=$(grep "^language:" "$config_file" 2>/dev/null | sed 's/^language:[[:space:]]*//' | tr -d '"' | tr -d "'" | sed 's/[[:space:]]*$//' || true)
+        if [ -n "$language" ]; then
+            if echo "$VALID_LANGUAGES" | grep -qw "$language"; then
+                pass "language: $language"
+            else
+                fail "language '$language' is not valid (expected: $VALID_LANGUAGES)"
+            fi
+        else
+            pass "language(s) not set (will auto-detect at runtime)"
+        fi
     fi
     echo ""
 

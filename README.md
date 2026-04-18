@@ -352,8 +352,12 @@ guidelines, or domain knowledge and you don't want to move or duplicate them.
 # Required — used in manifest presentation and logging
 project_name: my-app
 
-# Optional — primary language (python, java, csharp, react). Omit for auto-detection.
-language: python
+# Optional — project languages (python, java, csharp, react). Omit for auto-detection.
+# List format for multi-language projects:
+languages:
+  - python
+  - react
+# Or single string (backward compatible): language: python
 
 # Overlays — map base role names to your existing files
 # Keys must match base role directory names (architecture, coding-standards, etc.)
@@ -812,23 +816,36 @@ language-specific conventions via bundled **language packs**. Each skill has a t
 
 Supported languages: **Python**, **Java**, **C#**, **React/TypeScript**.
 
-### How language is detected
+### How languages are detected
 
-1. If `lao.config.yaml` has a `language:` field → use it
-2. Else auto-detect from project files:
+1. If `lao.config.yaml` has a `languages:` list → use it
+2. Else if `language:` string is present → treat as single-item list (backward compatible)
+3. Else auto-detect from project files — **all** rules are checked and every match
+   is collected (a full-stack repo can match both `python` and `react`):
    - `pyproject.toml` / `setup.py` / `requirements.txt` → Python
    - `pom.xml` / `build.gradle` → Java
    - `*.csproj` / `*.sln` → C#
    - `package.json` with `react` dependency / `next.config.*` → React/TypeScript
-3. If ambiguous or no match → ask the user
+4. If no match → ask the user
+
+When multiple languages are detected, all packs are loaded. The agent applies
+each pack to files of its language (e.g., Python standards to `.py` files,
+React/TS standards to `.tsx`/`.ts` files).
 
 ### Configuration
 
-Add the optional `language` field to `lao.config.yaml`:
+Add the optional `languages` list (or `language` string) to `lao.config.yaml`:
 
 ```yaml
+# Multi-language project (recommended for full-stack repos)
 project_name: my-app
-language: python    # python, java, csharp, or react (omit for auto-detection)
+languages:
+  - python
+  - react
+
+# Single language (backward compatible)
+project_name: my-app
+language: python
 ```
 
 ### What each language pack includes

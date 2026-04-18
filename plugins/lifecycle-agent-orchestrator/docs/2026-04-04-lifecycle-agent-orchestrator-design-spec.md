@@ -894,7 +894,13 @@ skills/<skill>/
 - **Language packs** capture implementation patterns (pytest vs JUnit, structlog vs SLF4J,
   Pydantic vs Bean Validation). These are specific and prescriptive.
 - **Language detection** happens once at pipeline start (from `lao.config.yaml` or
-  auto-detected from project files) and is recorded in the manifest.
+  auto-detected from project files) and is recorded in the manifest. Detection
+  collects **all** matches — a full-stack project with `pyproject.toml` and a
+  `package.json` containing `react` auto-detects as `[python, react]`.
+- **Multi-language projects** — config supports both `language: python` (single
+  string, backward compatible) and `languages: [python, react]` (list). When
+  multiple languages are detected, all language packs are loaded. The agent
+  applies each pack to files of its language during implementation and review.
 - **Extensible** — adding a new language requires only: (1) creating a
   `references/<language>/` subdirectory in each of the 4 skills with the expected
   files (checklist, examples, tooling config per skill), (2) adding detection rules

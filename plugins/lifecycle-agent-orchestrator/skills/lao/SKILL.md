@@ -283,18 +283,24 @@ Before any phase runs, discover project skills and build a manifest.
 Look for `<project-root>/lao.config.yaml`. If found:
 
 1. Parse the YAML file.
-2. Detect project language:
-   - If `language:` field is present → use it (valid: `python`, `java`, `csharp`, `react`)
-   - If absent → auto-detect from project files:
+2. Detect project languages:
+   - If `languages:` list is present → use it (each must be one of: `python`,
+     `java`, `csharp`, `react`)
+   - Else if `language:` string is present → treat as single-item list
+     (backward compatible)
+   - If neither is present → auto-detect from project files. Check **all**
+     rules and collect every match (a project can match more than one):
      - `pyproject.toml`, `setup.py`, or `requirements.txt` → `python`
      - `pom.xml` or `build.gradle` or `build.gradle.kts` → `java`
      - `*.csproj` or `*.sln` → `csharp`
      - `package.json` with `react` in dependencies, or `next.config.*` → `react`
-   - If ambiguous or no match → ask the user
-   - Record the detected language in the manifest. Language-specific
+   - If no match → ask the user
+   - Record the detected languages in the manifest. Language-specific
      references (`references/<language>/`) are loaded by skills that
      support language packs (coding-standards, testing-conventions,
-     code-review, security).
+     code-review, security). When multiple languages are detected, all
+     packs are loaded — apply each pack to files of its language (e.g.,
+     Python standards to `.py` files, React/TS standards to `.tsx/.ts`).
 3. Resolve overlay paths — verify each mapped file exists. Keys must match
    base role directory names.
 4. Resolve workflow override paths — verify each mapped file exists. Keys
@@ -313,7 +319,9 @@ Config file format:
 
 ```yaml
 project_name: my-app
-language: python            # optional: python, java, csharp, react (or omit for auto-detection)
+languages:                   # optional list (or omit for auto-detection)
+  - python
+  - react
 overlays:
   architecture: docs/architecture/standards.md
   coding-standards: .cursor/rules/coding.md
@@ -326,6 +334,10 @@ extra_roles:
   compliance-review: tools/compliance/SKILL.md
 ```
 
+Both `language: python` (single string, backward compatible) and
+`languages: [python, react]` (list) are accepted. If both are present,
+`languages` wins.
+
 All paths are relative to the project root (where `lao.config.yaml` lives).
 Only `project_name` is required; all other sections are optional.
 
@@ -333,9 +345,9 @@ If no config file is found, proceed to Step 2.
 
 **Step 2 — Convention scan (fallback):**
 
-If no config file was found, auto-detect the project language from project
-files (same detection rules as Step 1, sub-step 2). Record the result in
-the manifest.
+If no config file was found, auto-detect project languages from project
+files (same detection rules as Step 1, sub-step 2 — collect all matches).
+Record the results in the manifest.
 
 Scan `<project-root>/skills/` directly. Build the manifest from the
 directory contents:
@@ -377,7 +389,7 @@ Present the completed manifest at the start of the first checkpoint:
 ```
 Project skills detected for <project-name>:
   Source: lao.config.yaml (or: convention scan)
-  Language: python (from config) | java (auto-detected) | unknown (ask user)
+  Languages: python, react (from config) | java (auto-detected) | unknown (ask user)
   Overlays: architecture, coding-standards, shipping
   Extra roles: compliance-review (architecture, code-review, security)
   Domain context: auth-system (all), payment-processing (architecture, code-review)

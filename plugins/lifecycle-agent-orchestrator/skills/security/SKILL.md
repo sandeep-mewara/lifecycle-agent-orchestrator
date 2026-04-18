@@ -12,7 +12,7 @@ Standards for services that handle sensitive data — where security failures ca
 - `references/<language>/checklist.md` — Language-specific security checklist
 - `references/<language>/examples.md` — Language-specific code examples for key patterns
 
-Where `<language>` is `python`, `java`, `csharp`, or `react` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start.
+Where `<language>` is `python`, `java`, `csharp`, or `react` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start. Multi-language projects load all detected packs; apply each to files of its language.
 
 ---
 
