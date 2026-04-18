@@ -1,6 +1,6 @@
 ---
 name: testing-conventions
-description: Enforces testing standards when writing unit tests, integration tests, or agent evaluation tests. Covers test directory structure, naming conventions, fixture and setup patterns, mocking strategy, async testing, coverage requirements, and LLM-as-judge evaluation. Language-specific conventions (Python/pytest, Java/JUnit, C#/xUnit) are loaded from bundled reference packs. Use this skill when writing tests, creating test files, setting up fixtures, mocking services, or reviewing test code for standards compliance.
+description: Enforces testing standards when writing unit tests, integration tests, or agent evaluation tests. Covers test directory structure, naming conventions, fixture and setup patterns, mocking strategy, async testing, coverage requirements, and LLM-as-judge evaluation. Language-specific conventions (Python/pytest, Java/JUnit, C#/xUnit, React/Vitest) are loaded from bundled reference packs. Use this skill when writing tests, creating test files, setting up fixtures, mocking services, or reviewing test code for standards compliance.
 ---
 
 # Testing Standards
@@ -11,7 +11,7 @@ Standards for testing across your services. Tests follow a layered strategy: fas
 - `references/checklist.md` — Universal test review checklist
 - `references/<language>/checklist.md` — Language-specific test checklist
 
-Where `<language>` is `python`, `java`, or `csharp` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start.
+Where `<language>` is `python`, `java`, `csharp`, or `react` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start.
 
 See PROJECT.md for service-specific test directory structure, test commands, evaluation dataset details, and CI pipeline integration.
 

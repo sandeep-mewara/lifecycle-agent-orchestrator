@@ -21,7 +21,7 @@ project_name: my-app
 # Optional: primary programming language for this project.
 # Used to load language-specific references from coding-standards,
 # testing-conventions, code-review, and security skills.
-# Values: python, java, csharp (or omit for auto-detection)
+# Values: python, java, csharp, react (or omit for auto-detection)
 # language: python
 
 # Overlays: map base role names to your project-specific files.

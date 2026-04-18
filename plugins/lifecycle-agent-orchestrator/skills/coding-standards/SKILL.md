@@ -1,6 +1,6 @@
 ---
 name: coding-standards
-description: Enforces coding standards when writing or modifying code. Covers naming conventions, exception and error handling patterns, structured logging, tracing, project structure, environment-based configuration, secrets management, app initialization, async patterns, and code quality tooling. Language-specific conventions (Python, Java, C#) are loaded from bundled reference packs. Use this skill when writing code, creating new files or modules, defining classes or functions, adding error handling, setting up project scaffolding, configuring deployment, or reviewing code for standards compliance.
+description: Enforces coding standards when writing or modifying code. Covers naming conventions, exception and error handling patterns, structured logging, tracing, project structure, environment-based configuration, secrets management, app initialization, async patterns, and code quality tooling. Language-specific conventions (Python, Java, C#, React/TypeScript) are loaded from bundled reference packs. Use this skill when writing code, creating new files or modules, defining classes or functions, adding error handling, setting up project scaffolding, configuring deployment, or reviewing code for standards compliance.
 ---
 
 # Coding Standards
@@ -13,7 +13,7 @@ Standards drawn from production service patterns. The goal is consistency — an
 - `references/<language>/examples.md` — Full code examples for every pattern below
 - `references/<language>/tooling-config.md` — Build config, Dockerfile, CI/CD, environment settings
 
-Where `<language>` is `python`, `java`, or `csharp` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start.
+Where `<language>` is `python`, `java`, `csharp`, or `react` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start.
 
 ---
 
@@ -21,17 +21,18 @@ Where `<language>` is `python`, `java`, or `csharp` — determined by the projec
 
 Consistent naming makes code self-documenting. Apply the conventions of your language:
 
-| What | Principle | Python | Java | C# |
-|------|-----------|--------|------|-----|
-| Functions/methods | Verb-first, descriptive | `snake_case` | `camelCase` | `PascalCase` |
-| Classes | Noun, descriptive | `PascalCase` | `PascalCase` | `PascalCase` |
-| Interfaces | Describe capability | N/A | `PascalCase` | `IPascalCase` |
-| Variables | Descriptive, no abbreviations | `snake_case` | `camelCase` | `camelCase` |
-| Constants | Immutable values | `UPPER_SNAKE_CASE` | `UPPER_SNAKE_CASE` | `PascalCase` |
-| Booleans | Prefix with `is`/`has`/`can` | `is_active` | `isActive` | `IsActive` |
-| Files | Match primary type | `snake_case.py` | `PascalCase.java` | `PascalCase.cs` |
-| Private members | Indicate non-public scope | `_leading_underscore` | `private` keyword | `_camelCase` field |
-| Exception classes | Suffix `Error`/`Exception` | `AuthorizationError` | `AuthorizationException` | `AuthorizationException` |
+| What | Principle | Python | Java | C# | React/TS |
+|------|-----------|--------|------|-----|----------|
+| Functions/methods | Verb-first, descriptive | `snake_case` | `camelCase` | `PascalCase` | `camelCase` |
+| Components | Noun, descriptive | N/A | N/A | N/A | `PascalCase` |
+| Classes | Noun, descriptive | `PascalCase` | `PascalCase` | `PascalCase` | `PascalCase` |
+| Interfaces | Describe capability | N/A | `PascalCase` | `IPascalCase` | `PascalCase` |
+| Variables | Descriptive, no abbreviations | `snake_case` | `camelCase` | `camelCase` | `camelCase` |
+| Constants | Immutable values | `UPPER_SNAKE_CASE` | `UPPER_SNAKE_CASE` | `PascalCase` | `UPPER_SNAKE_CASE` |
+| Booleans | Prefix with `is`/`has`/`can` | `is_active` | `isActive` | `IsActive` | `isActive` |
+| Files | Match primary type | `snake_case.py` | `PascalCase.java` | `PascalCase.cs` | `PascalCase.tsx` |
+| Private members | Indicate non-public scope | `_leading_underscore` | `private` keyword | `_camelCase` field | `private` keyword / `#` |
+| Exception classes | Suffix `Error`/`Exception` | `AuthorizationError` | `AuthorizationException` | `AuthorizationException` | `AuthorizationError` |
 
 **Universal rules regardless of language:**
 - Variable names reflect purpose, not type (`userId` not `str1`)
@@ -82,7 +83,7 @@ Map all exception types to HTTP status codes in one place. Error responses conta
 
 ## Structured Logging
 
-Use your language's structured logging framework (Python: `structlog`, Java: SLF4J+Logback, C#: Serilog).
+Use your language's structured logging framework (Python: `structlog`, Java: SLF4J+Logback, C#: Serilog, React/TS: structured console + error tracking service).
 
 **Log level decision matrix:**
 
