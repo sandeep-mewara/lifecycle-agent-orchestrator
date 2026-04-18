@@ -13,7 +13,7 @@ Standards drawn from production service patterns. The goal is consistency — an
 - `references/<language>/examples.md` — Full code examples for every pattern below
 - `references/<language>/tooling-config.md` — Build config, Dockerfile, CI/CD, environment settings
 
-Where `<language>` is `python`, `java`, `csharp`, or `react` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start.
+Where `<language>` is `python`, `java`, `csharp`, or `react` — determined by the project's `lao.config.yaml` or auto-detected at pipeline start. Multi-language projects load all detected packs; apply each to files of its language.
 
 ---
 

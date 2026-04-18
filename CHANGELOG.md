@@ -8,16 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.5.0] - 2026-04-18
 
 ### Added
+- **Multi-language project support**: `languages:` list in `lao.config.yaml` for full-stack projects (e.g., `[python, react]`)
+- Auto-detection now collects **all** matches (a repo with `pyproject.toml` + `package.json` with react → `[python, react]`)
 - React/TypeScript language pack for all 4 language-aware skills (`coding-standards`, `testing-conventions`, `code-review`, `security`)
 - React-specific references: component patterns, hooks, error boundaries, Vitest/React Testing Library, ESLint/Prettier/TypeScript config, XSS prevention, auth token handling, protected routes
 - Detection heuristic: `package.json` with `react` dependency or `next.config.*` → `react`
 - React/TS column added to coding-standards naming conventions table
 
 ### Changed
+- Config accepts both `languages: [python, react]` (list) and `language: python` (backward compatible string)
+- `validate-project-skills.sh` parses both `languages:` list and `language:` string formats
 - `validate-plugin.sh` EXPECTED_REFS expanded from 35 to 42 entries (+ 7 React pack files)
-- `validate-project-skills.sh` VALID_LANGUAGES now includes `react`
-- All 4 language-aware SKILL.md descriptions updated to include React/TypeScript
-- README, design spec, and config examples updated for React/TypeScript support
+- All 4 language-aware SKILL.md files updated: multi-language guidance ("apply each pack to files of its language")
+- Manifest display changed from `Language:` to `Languages:` to reflect multi-language support
+- README, design spec, and config examples updated for multi-language and React/TypeScript support
 
 ## [1.4.0] - 2026-04-18
 
