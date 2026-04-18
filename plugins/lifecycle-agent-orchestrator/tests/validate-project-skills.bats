@@ -8,7 +8,7 @@ FIXTURES="$(cd "$(dirname "$BATS_TEST_FILENAME")" && pwd)/fixtures"
 @test "valid project passes with 0 failures" {
     run "$SCRIPT" "$FIXTURES/valid-project"
     [ "$status" -eq 0 ]
-    [[ "$output" == *"validation PASSED"* ]]
+    [[ "$output" == *"Validation PASSED"* ]]
     [[ "$output" != *"❌"* ]]
 }
 
