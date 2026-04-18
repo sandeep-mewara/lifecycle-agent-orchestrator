@@ -284,11 +284,12 @@ Look for `<project-root>/lao.config.yaml`. If found:
 
 1. Parse the YAML file.
 2. Detect project language:
-   - If `language:` field is present → use it (valid: `python`, `java`, `csharp`)
+   - If `language:` field is present → use it (valid: `python`, `java`, `csharp`, `react`)
    - If absent → auto-detect from project files:
      - `pyproject.toml`, `setup.py`, or `requirements.txt` → `python`
      - `pom.xml` or `build.gradle` or `build.gradle.kts` → `java`
      - `*.csproj` or `*.sln` → `csharp`
+     - `package.json` with `react` in dependencies, or `next.config.*` → `react`
    - If ambiguous or no match → ask the user
    - Record the detected language in the manifest. Language-specific
      references (`references/<language>/`) are loaded by skills that
@@ -312,7 +313,7 @@ Config file format:
 
 ```yaml
 project_name: my-app
-language: python            # optional: python, java, csharp (or omit for auto-detection)
+language: python            # optional: python, java, csharp, react (or omit for auto-detection)
 overlays:
   architecture: docs/architecture/standards.md
   coding-standards: .cursor/rules/coding.md

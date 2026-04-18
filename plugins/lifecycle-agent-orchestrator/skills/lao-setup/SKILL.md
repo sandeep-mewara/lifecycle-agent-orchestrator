@@ -30,6 +30,7 @@ Scan the project root for files that look like potential skill content.
 - `pyproject.toml`, `setup.py`, or `requirements.txt` → `python`
 - `pom.xml`, `build.gradle`, or `build.gradle.kts` → `java`
 - `*.csproj` or `*.sln` → `csharp`
+- `package.json` with `react` in dependencies, or `next.config.*` → `react`
 - If ambiguous or no match → ask the user during Step 3
 
 Include the detected language in the scan results summary:
@@ -114,7 +115,7 @@ want to create files from scratch.
    ```
    Detected language: python (from pyproject.toml). Correct? (y/n)
    ```
-   If user says no, ask which language to use (`python`, `java`, `csharp`, or omit for auto-detection).
+   If user says no, ask which language to use (`python`, `java`, `csharp`, `react`, or omit for auto-detection).
 3. Walk through each scan finding and ask whether to include it:
    ```
    Include docs/architecture/standards.md as architecture overlay? (y/n)

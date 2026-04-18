@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-04-18
+
+### Added
+- React/TypeScript language pack for all 4 language-aware skills (`coding-standards`, `testing-conventions`, `code-review`, `security`)
+- React-specific references: component patterns, hooks, error boundaries, Vitest/React Testing Library, ESLint/Prettier/TypeScript config, XSS prevention, auth token handling, protected routes
+- Detection heuristic: `package.json` with `react` dependency or `next.config.*` → `react`
+- React/TS column added to coding-standards naming conventions table
+
+### Changed
+- `validate-plugin.sh` EXPECTED_REFS expanded from 35 to 42 entries (+ 7 React pack files)
+- `validate-project-skills.sh` VALID_LANGUAGES now includes `react`
+- All 4 language-aware SKILL.md descriptions updated to include React/TypeScript
+- README, design spec, and config examples updated for React/TypeScript support
+
 ## [1.4.0] - 2026-04-18
 
 ### Added

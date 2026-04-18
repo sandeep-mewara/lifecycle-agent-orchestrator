@@ -149,16 +149,21 @@ EXPECTED_REFS=(
     "skills/coding-standards/references/csharp/checklist.md"
     "skills/coding-standards/references/csharp/examples.md"
     "skills/coding-standards/references/csharp/tooling-config.md"
+    "skills/coding-standards/references/react/checklist.md"
+    "skills/coding-standards/references/react/examples.md"
+    "skills/coding-standards/references/react/tooling-config.md"
     # testing-conventions: universal + language packs
     "skills/testing-conventions/references/checklist.md"
     "skills/testing-conventions/references/python/checklist.md"
     "skills/testing-conventions/references/java/checklist.md"
     "skills/testing-conventions/references/csharp/checklist.md"
+    "skills/testing-conventions/references/react/checklist.md"
     # code-review: universal + language packs
     "skills/code-review/references/code-standards.md"
     "skills/code-review/references/python/code-standards.md"
     "skills/code-review/references/java/code-standards.md"
     "skills/code-review/references/csharp/code-standards.md"
+    "skills/code-review/references/react/code-standards.md"
     # security: universal + language packs
     "skills/security/references/checklist.md"
     "skills/security/references/python/checklist.md"
@@ -167,6 +172,8 @@ EXPECTED_REFS=(
     "skills/security/references/java/examples.md"
     "skills/security/references/csharp/checklist.md"
     "skills/security/references/csharp/examples.md"
+    "skills/security/references/react/checklist.md"
+    "skills/security/references/react/examples.md"
 )
 
 for ref in "${EXPECTED_REFS[@]}"; do

@@ -352,7 +352,7 @@ guidelines, or domain knowledge and you don't want to move or duplicate them.
 # Required — used in manifest presentation and logging
 project_name: my-app
 
-# Optional — primary language (python, java, csharp). Omit for auto-detection.
+# Optional — primary language (python, java, csharp, react). Omit for auto-detection.
 language: python
 
 # Overlays — map base role names to your existing files
@@ -793,8 +793,8 @@ You rarely need to invoke them directly.
 | `intake` | 4 | Jira story reader and scope extractor with acceptance criteria |
 | `experience-design` | 2, cross-review | UX research, design options, and design specifications |
 | `architecture` | 3, 5, cross-review | System design, tech design, ADRs, and architectural review |
-| `coding-standards` | 7 | Coding conventions and standards enforcement (Python, Java, C#) |
-| `testing-conventions` | 7 | Test patterns, quality, and coverage standards (Python, Java, C#) |
+| `coding-standards` | 7 | Coding conventions and standards enforcement (Python, Java, C#, React/TS) |
+| `testing-conventions` | 7 | Test patterns, quality, and coverage standards (Python, Java, C#, React/TS) |
 | `code-review` | 7 | PR and code review with severity classification (language-aware) |
 | `security` | 7 | Security standards for auth, secrets, data protection, and compliance (language-aware) |
 | `acceptance-validation` | 8 | Acceptance criteria verification gate |
@@ -810,7 +810,7 @@ language-specific conventions via bundled **language packs**. Each skill has a t
 - **Language packs** (`references/<language>/`) — language-specific checklists, code examples,
   and tooling configuration
 
-Supported languages: **Python**, **Java**, **C#**.
+Supported languages: **Python**, **Java**, **C#**, **React/TypeScript**.
 
 ### How language is detected
 
@@ -819,6 +819,7 @@ Supported languages: **Python**, **Java**, **C#**.
    - `pyproject.toml` / `setup.py` / `requirements.txt` → Python
    - `pom.xml` / `build.gradle` → Java
    - `*.csproj` / `*.sln` → C#
+   - `package.json` with `react` dependency / `next.config.*` → React/TypeScript
 3. If ambiguous or no match → ask the user
 
 ### Configuration
@@ -827,7 +828,7 @@ Add the optional `language` field to `lao.config.yaml`:
 
 ```yaml
 project_name: my-app
-language: python    # python, java, or csharp (omit for auto-detection)
+language: python    # python, java, csharp, or react (omit for auto-detection)
 ```
 
 ### What each language pack includes
@@ -835,9 +836,11 @@ language: python    # python, java, or csharp (omit for auto-detection)
 | Skill | Universal | Per-Language Pack |
 |---|---|---|
 | `coding-standards` | Naming, error handling, logging, project structure | Checklist, code examples, tooling config (build, CI, Dockerfile) |
-| `testing-conventions` | Test pyramid, naming, mocking strategy, coverage | Framework-specific checklist (pytest / JUnit / xUnit) |
+| `testing-conventions` | Test pyramid, naming, mocking strategy, coverage | Framework-specific checklist (pytest / JUnit / xUnit / Vitest+RTL) |
 | `code-review` | Review modes, severity, output format | Language-specific code standards |
 | `security` | Secret management, auth, OWASP, compliance | Framework-specific checklist and code examples |
+
+**Bundled language packs:** Python, Java, C#, React/TypeScript.
 
 ### Adding a new language
 
@@ -860,7 +863,7 @@ security libraries, build tooling, CI pipeline).
 **Step 2 — Update detection and validation:**
 
 - `lao/SKILL.md` — add detection rules for the new language's build files
-  (e.g., `go.mod` → Go, `Cargo.toml` → Rust, `package.json` → TypeScript)
+  (e.g., `go.mod` → Go, `Cargo.toml` → Rust)
 - `lao-setup/SKILL.md` — add the same detection to the project scan
 - `validate-project-skills.sh` — add the language to the `VALID_LANGUAGES` list
 - `validate-plugin.sh` — add the new `references/<language>/` paths to `EXPECTED_REFS`

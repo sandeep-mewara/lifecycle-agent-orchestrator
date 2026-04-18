@@ -843,8 +843,8 @@ Skills are divided into **commands** (user-invoked entry points) and **roles**
 | **intake** | Role | Jira story reader, scope extractor, AC derivation | 4 (per-ticket) |
 | **experience-design** | Role | UX research, design options, specifications | 2 (PRD-level), cross-reviews |
 | **architecture** | Role | System design, ADRs, review (system-level and ticket-level) | 3 (system), 5 (per-ticket), cross-reviews |
-| **coding-standards** | Role | Coding conventions and standards enforcement (Python, Java, C#) | 7 (via overlay) |
-| **testing-conventions** | Role | Test patterns, quality, coverage standards (Python, Java, C#) | 7 (via overlay) |
+| **coding-standards** | Role | Coding conventions and standards enforcement (Python, Java, C#, React/TS) | 7 (via overlay) |
+| **testing-conventions** | Role | Test patterns, quality, coverage standards (Python, Java, C#, React/TS) | 7 (via overlay) |
 | **code-review** | Role | PR and code review with severity classification (language-aware) | 7 |
 | **security** | Role | Security standards for auth, secrets, data protection, compliance (language-aware) | 7 (via overlay) |
 | **acceptance-validation** | Role | AC verification gate with evidence recording | 8 |
@@ -902,7 +902,7 @@ skills/<skill>/
   SKILL.md or checklist changes needed — the language-agnostic base remains untouched.
   See the README "Adding a new language" section for the step-by-step procedure.
 
-**Supported languages:** Python, Java, C#.
+**Supported languages:** Python, Java, C#, React/TypeScript.
 
 ---
 

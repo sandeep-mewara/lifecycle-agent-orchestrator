@@ -198,7 +198,7 @@ run_config_mode() {
 
     # --- language ---
     echo "--- Language ---"
-    local VALID_LANGUAGES="python java csharp"
+    local VALID_LANGUAGES="python java csharp react"
     local language
     language=$(grep "^language:" "$config_file" 2>/dev/null | sed 's/^language:[[:space:]]*//' | tr -d '"' | tr -d "'" | sed 's/[[:space:]]*$//' || true)
     if [ -n "$language" ]; then
