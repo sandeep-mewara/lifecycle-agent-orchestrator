@@ -82,7 +82,7 @@ lifecycle-agent-orchestrator/                           # Marketplace root (Git 
 │       │   └── sample-requirement.md        # Bundled sample for dry-run
 │       ├── scripts/
 │       │   ├── check-consistency.sh         # Cross-reference consistency checks
-│       │   ├── validate-plugin.sh           # Plugin structural validation (61 checks)
+│       │   ├── validate-plugin.sh           # Plugin structural validation (91 checks)
 │       │   └── validate-project-skills.sh   # Project skills validation (convention/config/scan)
 │       └── tests/
 │           ├── validate-plugin.bats         # Plugin validation tests
@@ -885,6 +885,10 @@ skills/<skill>/
       checklist.md
       examples.md
       tooling-config.md
+    react/                          # React/TypeScript language pack
+      checklist.md
+      examples.md
+      tooling-config.md
 ```
 
 **Design rationale:**
@@ -922,7 +926,7 @@ skills/<skill>/
 - **Phase workflows** — standalone workflows for Phases 6-9 with TDD, two-stage review, verification, and completion disciplines
 - **Reference walkthrough** — end-to-end example
 - **Config template** — annotated `lao.config.yaml` example
-- **Validation scripts** — `validate-plugin.sh` (61 structural checks), `check-consistency.sh` (cross-reference checks), `validate-project-skills.sh` (project convention/config/scan validation)
+- **Validation scripts** — `validate-plugin.sh` (91 structural checks), `check-consistency.sh` (cross-reference checks), `validate-project-skills.sh` (project convention/config/scan validation)
 - **Test suite** — bats tests with fixtures for plugin and project-skills validation
 - **README** — installation, overlay convention, UX contract
 

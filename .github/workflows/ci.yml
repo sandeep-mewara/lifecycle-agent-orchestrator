@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install bats
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bats
+
+      - name: Plugin structural validation
+        run: bash plugins/lifecycle-agent-orchestrator/scripts/validate-plugin.sh
+
+      - name: Cross-reference consistency
+        run: bash plugins/lifecycle-agent-orchestrator/scripts/check-consistency.sh
+
+      - name: Bats test suite
+        run: bats plugins/lifecycle-agent-orchestrator/tests/
