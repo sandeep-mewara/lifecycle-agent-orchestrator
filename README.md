@@ -1,6 +1,6 @@
-# Lifecycle Agent Orchestrator
+# Lifecycle Agent Orchestrator (LAO)
 
-A **Claude Code & Cursor Plugin** — a portable, project-agnostic AI-powered product development lifecycle engine that orchestrates end-to-end workflows, driving requirements through to pull requests with cross-role review gates, structured checkpoints and built-in TDD workflows across phases such as technical design and automated testing, all powered by advanced AI coding skills. 
+LAO, a **multi-agent orchestrator** is a **Claude Code & Cursor Plugin** - a portable, project-agnostic AI-powered product development lifecycle engine that uses **multiple agents** to orchestrates end-to-end workflows, driving requirements through to pull requests with cross-role review gates, structured checkpoints and built-in TDD workflows across phases such as technical design and automated testing, all **powered by advanced AI coding skills**. 
 
 > **Note:** This plugin works in both [Claude Code](https://claude.ai/code) and
 > [Cursor](https://cursor.com). All `/plugin` and `/lao` commands
@@ -8,16 +8,18 @@ A **Claude Code & Cursor Plugin** — a portable, project-agnostic AI-powered pr
 > The primary orchestrator command is `/lao`; `/lifecycle-agent-orchestrator` is the
 > canonical full name and behaves the same way.
 
+This **multi-agent orchestration** is done via 10 skills, one each for a role where each role is a distinct agent persona (PM, Architect, Designer, etc.) invoked by the orchestrator agent at the right phase.
+
 ## ✨ What This Is
 
-The orchestrator coordinates 9 development phases:
+A **multi-agent orchestrator** that coordinates 9 development phases:
 
 ```
 Product Management → Experience Design → Architecture (System Design)
   → per ticket: Intake → Tech Design → Plan → Implement → Validate → Ship
 ```
 
-All cross-reviews (PM, XD, Architecture) happen in Phases 1-3 before any ticket work starts.
+Leveraging **multiple agents**, all cross-reviews (PM, XD, Architecture) happen in Phases 1-3 before any ticket work starts.
 Phase 2 is conditional — skipped for backend-only requirements. The per-ticket loop
 (Phases 4-9) is pure execution with no additional cross-review gates.
 
@@ -48,7 +50,7 @@ costs no extra tokens. Human approval checkpoints remain active during execution
 **1. Install** (inside a Claude Code or Cursor session):
 
 ```
-/plugin marketplace add sandeep-mewara/lifecycle-orchestrator
+/plugin marketplace add sandeep-mewara/lifecycle-agent-orchestrator
 /plugin install lifecycle-agent-orchestrator@lifecycle-agent-orchestrator
 ```
 
